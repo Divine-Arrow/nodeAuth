@@ -3,11 +3,16 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 m-auto">
-            <% if(typeof message !== 'undefined') { %>
+            <% if( typeof message !== 'undefined') { %>
+            <% if ( typeof messageType !== 'undefined' && messageType === 'success') { %>
+            <div class="alert alert-success text-center">
+                <%= message%>
+            </div>
+            <%} else {%>
             <div class="alert alert-danger text-center">
                 <%= message %>
             </div>
-            <%}%>
+            <%}}%>
             <div class="card">
                 <div class="card-header text-center">
                     <i class="fas fa-user-plus pr-2"></i>
@@ -34,7 +39,7 @@
                         <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
                             name="password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Signup</button>
+                    <button type="submit" class="btn btn-warning">Signup</button>
                 </form>
             </div>
         </div>

@@ -27,7 +27,9 @@ app.use(sessions({
     saveUninitialized: true,
     cookie: {
         maxAge: Date.now() + (1 * 60 * 1000)
-    }
+    },
+    httpOnly: true,
+    ephemeral: true
 }));
 
 // ejs.delimiter = '?';
@@ -51,13 +53,13 @@ app.post('/login', (req, res) => {
     }).then((user) => {
         if (!user) {
             return res.render('login', {
-                message: `this "${body.email}" email is not registered with us.`,
+                message: `This "${body.email}" email is not registered with us.`,
                 messageType: 'danger',
                 title: 'login'
             });
         } else if (!bcrypt.compareSync(body.password, user.password)) {
             return res.render('login', {
-                message: 'invalid email or password',
+                message: 'Invalid email or password',
                 messageType: 'danger',
                 title: 'login'
             });
@@ -107,13 +109,15 @@ app.post('/register', (req, res) => {
     }).catch((e) => {
         if (e.code === 11000) {
             res.status(400).render('register', {
-                message: 'email already exist.',
+                message: 'Email already exist.',
                 messageType: 'danger',
                 title: 'register'
             });
         } else if (e) {
             res.render('register', {
-                title: 'register'
+                title: 'register',
+                message: 'Something Went wrong..',
+                messageType: 'danger'
             });
         }
     });

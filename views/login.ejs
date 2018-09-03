@@ -3,18 +3,9 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-6 mx-auto">
-      <% if( typeof successMessage === undefined && successMessage) { %>
+      <% if( typeof message !== 'undefined') { %>
       <div class="alert alert-success text-center">
-        <%= successMessage %>
-      </div>
-      <%}%>
-      <% if(error.code !== 200 && error.code === 404) { %>
-      <div class="alert alert-danger text-center">
-        <%= error.message %>
-      </div>
-      <%} else if(error.code !== 200){%>
-      <div class="alert alert-danger text-center">
-        <%= "Something went wrong" %>
+        <%= message %>
       </div>
       <%}%>
       <div class="card">

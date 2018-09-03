@@ -26,9 +26,11 @@ app.use(sessions({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: Date.now() + (1*60*1000)
+        maxAge: Date.now() + (1 * 60 * 1000)
     }
 }));
+
+// ejs.delimiter = '?';
 
 app.get('/', (req, res) => {
     res.render('home', {
@@ -38,10 +40,7 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
     res.render('login', {
-        title: 'Login',
-        error: {
-            code: 200
-        }
+        title: 'Login'
     });
 });
 
@@ -52,18 +51,14 @@ app.post('/login', (req, res) => {
     }).then((user) => {
         if (!user) {
             return res.render('login', {
-                error: {
-                    code: 404,
-                    message: `this "${body.email}" email is not registered with us.`
-                },
+                message: `this "${body.email}" email is not registered with us.`,
+                messageType: 'danger',
                 title: 'login'
             });
         } else if (!bcrypt.compareSync(body.password, user.password)) {
             return res.render('login', {
-                error: {
-                    code: 404,
-                    message: 'invalid email or password'
-                },
+                message: 'invalid email or password',
+                messageType: 'danger',
                 title: 'login'
             });
         }
@@ -71,9 +66,6 @@ app.post('/login', (req, res) => {
         res.redirect('/dashboard');
     }).catch((e) => {
         return res.status(400).render('login', {
-            error: {
-                code: 400
-            },
             title: 'Login'
         });
     });
@@ -81,9 +73,6 @@ app.post('/login', (req, res) => {
 
 app.get('/register', (req, res) => {
     res.render('register', {
-        error: {
-            code: 200
-        },
         title: 'Register'
     });
 });
@@ -102,38 +91,28 @@ app.post('/register', (req, res) => {
 
     var body = _.pick(req.body, ['firstName', 'lastName', 'email', 'password']);
     body.email = body.email.toLowerCase();
-    body.password = bcrypt.hashSync(body.password, 14);
+    body.password = bcrypt.hashSync(body.password, 8);
     var newUser = new User(body);
     newUser.save().then((result) => {
         if (!result) {
             return res.status(400).render('register', {
-                error: {
-                    code: 200
-                },
                 title: 'register'
             });
         }
         res.render('login', {
             title: 'login',
-            error: {
-                code: 200
-            },
-            successMessage: 'Registered Sucessfully.'
+            message: 'Registered Sucessfully.',
+            messageType: 'success'
         });
     }).catch((e) => {
         if (e.code === 11000) {
             res.status(400).render('register', {
-                error: {
-                    code: 11000,
-                    message: 'email already exist.'
-                },
+                message: 'email already exist.',
+                messageType: 'danger',
                 title: 'register'
             });
         } else if (e) {
             res.render('register', {
-                error: {
-                    code: 200
-                },
                 title: 'register'
             });
         }
@@ -143,3 +122,5 @@ app.post('/register', (req, res) => {
 app.listen(3000, () => {
     console.log('server is started..!')
 });
+
+//  fix danger and siccess message

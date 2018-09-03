@@ -1,0 +1,44 @@
+<% include partials/header %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 mx-auto">
+      <% if( typeof successMessage === undefined && successMessage) { %>
+      <div class="alert alert-success text-center">
+        <%= successMessage %>
+      </div>
+      <%}%>
+      <% if(error.code !== 200 && error.code === 404) { %>
+      <div class="alert alert-danger text-center">
+        <%= error.message %>
+      </div>
+      <%} else if(error.code !== 200){%>
+      <div class="alert alert-danger text-center">
+        <%= "Something went wrong" %>
+      </div>
+      <%}%>
+      <div class="card">
+        <div class="card-header text-center">
+          <i class="fas fa-sign-in-alt pr-2"></i>
+          Login
+        </div>
+        <form class="card-body" action="/login" method="POST">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"
+              name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password"
+              required>
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<% include partials/fotter %>

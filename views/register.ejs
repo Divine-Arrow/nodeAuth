@@ -1,0 +1,43 @@
+<% include partials/header %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 m-auto">
+            <% if(error.code !== 200 && error.code === 11000) { %>
+            <div class="alert alert-danger text-center">
+                <%= "Email Already Exist" %>
+            </div>
+            <%}%>
+            <div class="card">
+                <div class="card-header text-center">
+                    <i class="fas fa-user-plus pr-2"></i>
+                    Register
+                </div>
+                <form class="card-body" action="/register" method="POST">
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="exampleInputEmail1">Name</label>
+                            <input type="text" class="form-control" placeholder="First name" name="firstName" required>
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1">Last Name</label>
+                            <input type="text" class="form-control" placeholder="Last name" name="lastName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            placeholder="Enter email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
+                            name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Signup</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include partials/fotter %>

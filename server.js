@@ -14,6 +14,7 @@ const {
 const app = express();
 
 const secret = process.env.EXPRESS_SESSION_SECRET || '123456789';
+const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
@@ -161,8 +162,8 @@ app.post('/register', (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-    console.log('server is started..!')
+app.listen(port, () => {
+    console.log(`Server is started at ${port}`)
 });
 
 //  fix danger and siccess message

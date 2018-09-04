@@ -112,7 +112,6 @@ app.get('/dashboard', (req, res) => {
         if (!user) {
             return res.redirect('/login');
         }
-        console.log('*******find', user);
         res.locals.userProfile = {
             name: `${user.firstName} ${user.lastName}`,
             email: user.email

@@ -2,10 +2,10 @@
 
 <div class="jumbotron">
     <div class="container border border-alert">
-        <h1 class="display-4 text-primary">Welcome Bhupender</h1>
+        <h1 class="display-4 text-primary">Welcome <%= `"${locals.userProfile.name}"` %></h1>
         <p class="lead">welcome to the Dashboard. Here you will get all the summary</p>
         <hr class="my-4">
-        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+        <p><%= `"${locals.userProfile.email}"` %> uses utility classes for typography and spacing to space content out within the larger container.</p>
         <p class="lead">
             <a class="btn btn-warning" href="#" role="button">Analyse</a>
         </p>

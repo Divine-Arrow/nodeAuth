@@ -13,6 +13,7 @@ const {
 
 const app = express();
 
+const secret = process.env.EXPRESS_SESSION_SECRET || '123456789';
 
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
@@ -22,7 +23,7 @@ app.use(bodyParser.urlencoded({
 
 // intialize client session as middleware
 app.use(sessions({
-    secret: 'encryptionPassword@123',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -31,6 +32,15 @@ app.use(sessions({
     httpOnly: true,
     ephemeral: true
 }));
+
+app.use((req, res, next) => {
+    if (req.session && req.session.user) {
+        res.locals.isAuthenticated = true;
+    } else {
+        res.locals.isAuthenticated = false;
+    }
+    next();
+})
 
 // ejs.delimiter = '?';
 
@@ -41,6 +51,17 @@ app.get('/', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
+    if (req.session && req.session.user) {
+        return res.redirect('/dashboard');
+    }
+    res.render('login', {
+        title: 'Login'
+    });
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.locals.isAuthenticated = false;
     res.render('login', {
         title: 'Login'
     });
@@ -74,6 +95,9 @@ app.post('/login', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
+    if (res.locals.isAuthenticated) {
+        return res.redirect('/dashboard');
+    }
     res.render('register', {
         title: 'Register'
     });
@@ -83,9 +107,23 @@ app.get('/dashboard', (req, res) => {
     if (!req.session && !req.session.user) {
         return res.redirect(401, '/login');
     }
-    res.render('dashboard', {
-        title: 'Dashboard'
+    User.findById(req.session.user).then((user) => {
+        if (!user) {
+            return res.redirect('/login');
+        }
+        console.log('*******find', user);
+        res.locals.userProfile = {
+            name: `${user.firstName} ${user.lastName}`,
+            email: user.email
+        }
+        // res.locals.userName = `${user.firstName} ${user.lastName}`;
+        res.render('dashboard', {
+            title: 'Dashboard'
+        });
+    }).catch((e) => {
+        return res.redirect('/login')
     });
+
 });
 
 

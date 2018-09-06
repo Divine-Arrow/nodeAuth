@@ -128,7 +128,13 @@ app.get('/dashboard', (req, res) => {
 
 
 app.post('/register', (req, res) => {
-
+    if(req.body.password !== req.body.confirmPassword) {
+        return res.status(400).render('register', {
+            title: 'register',
+            message: 'confirm password are not same with password',
+            messageType: 'danger'
+        });
+    }
     var body = _.pick(req.body, ['firstName', 'lastName', 'email', 'password']);
     body.email = body.email.toLowerCase();
     body.password = bcrypt.hashSync(body.password, 8);
